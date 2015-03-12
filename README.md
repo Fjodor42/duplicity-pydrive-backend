@@ -13,14 +13,52 @@ apt-get install python-crypto python-setuptools checkinstall python-lockfile
 ```
 gpg --gen-key
 ```
-## Create service account in your Google account
+## Create a Google project to to act on your behalf
+
+As stated above, PyDrive enables the use of managed Google accounts through a service account, and the instructions below will explain the use of such ones.
+
+In the case of a single Google account with a large Drive, though, you might not want or be able to use that approach, and should use the following procedure instead
+
+### Create Google project to act on your behalf
+- Go to [Google developers console](https://console.developers.google.com) and create a project
+- Under APIs, find the "Drive API" and enable it
+- Under Credentials, click "Create new Client ID"
+- For "Application type", select "Installed application"
+- For "Installed application type", select "Other" and click "Create Client ID"
+- Click "Download JSON", and save the file under the name "client_secrets.json" in an appropriate location
+- Make sure to do the following in the script you run duplicity from:
+-- ```export GOOGLE_AUTH_MODE=private```
+-- ```export GOOGLE_SECRETS_FILE=/some/path/to/client_secrets.json```
+-- ```export GOOGLE_CREDENTIALS_FILE=/some/path/to/client_credentials.json```
+-- ```duplicity <command> <args> pydrive://user@gmail.com/relevant_drive_folder```
+-- ```unset GOOGLE_AUTH_MODE```
+-- ```unset GOOGLE_SECRETS_FILE```
+-- ```unset GOOGLE_CREDENTIALS_FILE```
+
+### Create service account in your Google account
 - Go to [Google developers console](https://console.developers.google.com) and create a service account
-- Write down am email address of the account, XXX@developer.gserviceaccount.com 
+- Write down the email address of the account, XXX@developer.gserviceaccount.com 
 - Download a .p12 key file, then convert it to the .pem:
 ```
 openssl pkcs12 -in XXX.p12  -nodes -nocerts > pydriveprivatekey.pem
 ```
 (you'll need a password you got when created the account)
+- 
+- Make sure to do the following in the script you run duplicity from:
+-- ```export GOOGLE_AUTH_MODE=managed```
+-- ```export GOOGLE_DRIVE_ACCOUNT_KEY="<contents of pydriveprivatekey.pem
+including
+line
+breaks
+and
+a
+final
+quotation
+mark"```
+-- ```duplicity <command> <args> pydrive://XXX@developer.gserviceaccount.com/relevant_drive_folder```
+-- ```unset GOOGLE_AUTH_MODE```
+-- ```unset GOOGLE_DRIVE_ACCOUNT_KEY```
+-- ```unset GOOGLE_CREDENTIALS_FILE```
 
 ## Download, patch and install duplicity
 ### Download duplicity and signature file
