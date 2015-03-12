@@ -28,7 +28,7 @@ In the case of a single Google account with a large Drive, though, you might not
 - Click "Download JSON", and save the file under the name "client_secrets.json" in an appropriate location
 - Make sure to do the following in the script you run duplicity from:
 ```
-export GOOGLE_AUTH_MODE=private
+export GOOGLE_AUTH_MODE=personal
 export GOOGLE_SECRETS_FILE=/some/path/to/client_secrets.json
 export GOOGLE_CREDENTIALS_FILE=/some/path/to/client_credentials.json
 
