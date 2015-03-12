@@ -39,14 +39,47 @@ class PyDriveBackend(duplicity.backend.Backend):
             raise BackendException('PyDrive backend requires PyDrive installation'
                                    'Please read the manpage to fix.')
 
-        if 'GOOGLE_DRIVE_ACCOUNT_KEY' not in os.environ:
-            raise BackendException('GOOGLE_DRIVE_ACCOUNT_KEY environment variable not set. Please read the manpage to fix.')
-        account_key = os.environ['GOOGLE_DRIVE_ACCOUNT_KEY']
+        if 'GOOGLE_AUTH_MODE' not in os.environ:
+            raise BackendException('GOOGLE_AUTH_MODE environment variable not set. Please read the manpage to fix.')
+        auth_mode = os.environ['GOOGLE_AUTH_MODE']
 
-        credentials = SignedJwtAssertionCredentials(parsed_url.username + '@' + parsed_url.hostname, account_key, scope='https://www.googleapis.com/auth/drive')
-        credentials.authorize(httplib2.Http())
-        gauth = GoogleAuth()
-        gauth.credentials = credentials
+        if auth_mode != 'managed' and auth_mode != 'personal':
+            raise BackendException('GOOGLE_AUTH_MODE environment variable not set to either "managed" or "personal". Please read the manpage to fix.')
+
+        if auth_mode == 'managed':
+            if 'GOOGLE_DRIVE_ACCOUNT_KEY' not in os.environ:
+                raise BackendException('GOOGLE_DRIVE_ACCOUNT_KEY environment variable not set. Please read the manpage to fix.')
+            account_key = os.environ['GOOGLE_DRIVE_ACCOUNT_KEY']
+
+            credentials = SignedJwtAssertionCredentials(parsed_url.username + '@' + parsed_url.hostname, account_key, scope='https://www.googleapis.com/auth/drive')
+            credentials.authorize(httplib2.Http())
+            gauth = GoogleAuth()
+            gauth.credentials = credentials
+
+        else:
+            if 'GOOGLE_SECRETS_FILE' not in os.environ:
+                raise BackendException('GOOGLE_SECRETS_FILE environment variable not set. Please read the manpage to fix.')
+            secrets_file = os.environ['GOOGLE_SECRETS_FILE']
+
+            if 'GOOGLE_CREDENTIALS_FILE' not in os.environ:
+                raise BackendException('GOOGLE_CREDENTIALS_FILE environment variable not set. Please read the manpage to fix.')
+            credentials_file = os.environ['GOOGLE_CREDENTIALS_FILE']
+
+            gauth = GoogleAuth()
+
+            gauth.LoadClientConfigFile(secrets_file)
+            gauth.LoadCredentialsFile(credentials_file)
+
+            if gauth.credentials is None:
+                gauth.CommandLineAuth()
+
+                if gauth.access_token_expired:
+                    gauth.Refresh()
+                else:
+                    gauth.Authorize()
+
+                    gauth.SaveCredentialsFile(credentials_file)
+
         self.drive = GoogleDrive(gauth)
 
         # Dirty way to find root folder id
