@@ -27,32 +27,15 @@ In the case of a single Google account with a large Drive, though, you might not
 - For "Installed application type", select "Other" and click "Create Client ID"
 - Click "Download JSON", and save the file under the name "client_secrets.json" in an appropriate location
 - Make sure to do the following in the script you run duplicity from:
-  -
 ```
 export GOOGLE_AUTH_MODE=private
-```
-  -
-```
 export GOOGLE_SECRETS_FILE=/some/path/to/client_secrets.json
-```
-  -
-```
 export GOOGLE_CREDENTIALS_FILE=/some/path/to/client_credentials.json
-```
-  -
-```
+
 duplicity <command> <args> pydrive://user@gmail.com/relevant_drive_folder
-```
-  -
-```
+
 unset GOOGLE_AUTH_MODE
-```
-  -
-```
 unset GOOGLE_SECRETS_FILE
-```
-  -
-```
 unset GOOGLE_CREDENTIALS_FILE
 ```
 
@@ -66,11 +49,8 @@ openssl pkcs12 -in XXX.p12  -nodes -nocerts > pydriveprivatekey.pem
 (you'll need a password you got when created the account)
 - 
 - Make sure to do the following in the script you run duplicity from:
-  - ```
+```
 export GOOGLE_AUTH_MODE=managed
-```
-  -
-```
 export GOOGLE_DRIVE_ACCOUNT_KEY="<contents of pydriveprivatekey.pem
 including
 line
@@ -80,20 +60,11 @@ a
 final
 quotation
 mark"
-```
---
-```
+
 duplicity <command> <args> pydrive://XXX@developer.gserviceaccount.com/relevant_drive_folder
-```
---
-```
+
 unset GOOGLE_AUTH_MODE
-```
---
-```
 unset GOOGLE_DRIVE_ACCOUNT_KEY
-```
---```
 unset GOOGLE_CREDENTIALS_FILE
 ```
 
