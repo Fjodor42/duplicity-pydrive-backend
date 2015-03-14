@@ -19,7 +19,7 @@ As stated above, PyDrive enables the use of managed Google accounts through a se
 
 In the case of a single Google account with a large Drive, though, you might not want or be able to use that approach, and should use the following procedure instead
 
-### Alternative 1: Create Google project to act on your behalf
+### Alternative 1: Create a native Client ID to act on your behalf
 - Go to [Google developers console](https://console.developers.google.com) and create a project
 - Under APIs, find the "Drive API" and enable it
 - Under Credentials, click "Create new Client ID"
@@ -59,7 +59,7 @@ and
 a
 final
 quotation
-mark"
+mark>"
 
 duplicity <command> <args> pydrive://XXX@developer.gserviceaccount.com/relevant_drive_folder
 
