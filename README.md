@@ -46,8 +46,7 @@ unset GOOGLE_CREDENTIALS_FILE
 ```
 openssl pkcs12 -in XXX.p12  -nodes -nocerts > pydriveprivatekey.pem
 ```
-(you'll need a password you got when created the account)
-- 
+You'll need a password you got when created the account
 - Make sure to do the following in the script you run duplicity from:
 ```
 export GOOGLE_AUTH_MODE=managed
