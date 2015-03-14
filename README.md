@@ -19,7 +19,7 @@ As stated above, PyDrive enables the use of managed Google accounts through a se
 
 In the case of a single Google account with a large Drive, though, you might not want or be able to use that approach, and should use the following procedure instead
 
-### Create Google project to act on your behalf
+### Alternative 1: Create Google project to act on your behalf
 - Go to [Google developers console](https://console.developers.google.com) and create a project
 - Under APIs, find the "Drive API" and enable it
 - Under Credentials, click "Create new Client ID"
@@ -39,7 +39,7 @@ unset GOOGLE_SECRETS_FILE
 unset GOOGLE_CREDENTIALS_FILE
 ```
 
-### Create service account in your Google account
+### Alternative 2: Create service account in your Google account
 - Go to [Google developers console](https://console.developers.google.com) and create a service account
 - Write down the email address of the account, XXX@developer.gserviceaccount.com 
 - Download a .p12 key file, then convert it to the .pem:
